@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
 
+
         int startHour = Integer.parseInt(startHourFormat.format(cal.getTime()));
         Log.e("startHour",Integer.toString(startHour));
 
@@ -66,10 +67,34 @@ public class MainActivity extends AppCompatActivity {
         Log.e("TEST", test);
 
         for (int i = startHour;i <= endHour; i++) {
+            String ampm="";
+            int a = cal.get(Calendar.AM_PM);
+
+            if(a == Calendar.AM)
+            {
+                ampm="AM";
+            }
+            else
+            {
+                ampm="PM";
+            }
+
+                int k=0;
+            if(k==0)
+            {
+
+                hours.add(startHour+":00-"+startHour+":30"+ampm);
+            }
+            else if(k==1)
+            {
+                hours.add(startHour+":30 - " + (startHour+1)+":00");
+            }
 
             cal.set(Calendar.HOUR_OF_DAY, i );
-            hours.add(sdf.format(cal.getTime()));
+           // hours.add(sdf.format(cal.getTime()));
             System.out.println("ArrayList"+hours);
+            k=1;
+
         }
 
 
