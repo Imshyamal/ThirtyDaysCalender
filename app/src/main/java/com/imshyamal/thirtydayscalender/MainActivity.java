@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,69 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> dates = new ArrayList<String>();
+    ArrayList<String> hours = new ArrayList<String>();
+    ArrayList<String> minutes = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initCustomSpinner();
+        initCustomTimeSpinner();
+
+
+
+    }
+
+    private void initCustomTimeSpinner() {
+
+        Spinner spinnerCustom = (Spinner) findViewById(R.id.spinner2);
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:a");
+
+        SimpleDateFormat startHourFormat = new SimpleDateFormat("HH");
+        cal.set(Calendar.HOUR_OF_DAY, 8);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        int startHour = Integer.parseInt(startHourFormat.format(cal.getTime()));
+        Log.e("startHour",Integer.toString(startHour));
+
+        Log.e("withot format Starttime",cal.getTime().toString());
+
+        SimpleDateFormat endHourFormat = new SimpleDateFormat("HH");
+        cal.set(Calendar.HOUR_OF_DAY, 21);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        int endHour = Integer.parseInt(endHourFormat.format(cal.getTime()));
+        Log.e("endHour",Integer.toString(endHour));
+
+        Log.e("withot format End time",cal.getTime().toString());
+
+        String test = sdf.format(cal.getTime());
+        Log.e("TEST", test);
+
+        for (int i = startHour;i <= endHour; i++) {
+
+            cal.set(Calendar.HOUR_OF_DAY, i );
+            hours.add(sdf.format(cal.getTime()));
+            System.out.println("ArrayList"+hours);
+        }
+
+
+
+
+
+
+
+
+
+        String result = sdf.format(Calendar.getInstance().getTime());
+      //  System.out.println(result);
+
+
 
 
 
