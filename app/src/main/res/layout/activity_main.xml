@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown"
         android:background="@drawable/custom_spinner_background"
+
         />
 
 

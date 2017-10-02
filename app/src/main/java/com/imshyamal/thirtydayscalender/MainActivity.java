@@ -37,8 +37,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCustomTimeSpinner() {
+
+        Spinner timeSpinner = (Spinner) findViewById(R.id.spinner2);
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:a");
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm:a");
 
         cal.set(Calendar.HOUR_OF_DAY, 21);
         cal.set(Calendar.MINUTE, 0);
@@ -53,11 +56,38 @@ public class MainActivity extends AppCompatActivity {
         do {
             String interval = sdf.format(cal.getTime()) + " - ";
             cal.add(Calendar.MINUTE, 30);
-            interval += sdf.format(cal.getTime());
+            interval += sdf2.format(cal.getTime());
             hours.add(interval);
         } while (cal.getTime().before(endHour));
 
         System.out.println("ArrayList " + hours);
+
+
+
+        CustomSpinnerAdapter customSpinnerAdapter=new CustomSpinnerAdapter(MainActivity.this,hours);
+        timeSpinner.setAdapter(customSpinnerAdapter);
+        timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+
+                Toast.makeText(parent.getContext(), "Customized Spinner." + item, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+
+
+
+
+
     }
 
 
