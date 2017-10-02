@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> dates = new ArrayList<String>();
@@ -36,6 +37,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCustomTimeSpinner() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:a");
+
+        cal.set(Calendar.HOUR_OF_DAY, 21);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        Date endHour = cal.getTime();
+
+        cal.set(Calendar.HOUR_OF_DAY, 8);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        do {
+            String interval = sdf.format(cal.getTime()) + " - ";
+            cal.add(Calendar.MINUTE, 30);
+            interval += sdf.format(cal.getTime());
+            hours.add(interval);
+        } while (cal.getTime().before(endHour));
+
+        System.out.println("ArrayList " + hours);
+    }
+
+
+
+
+   /* private void initCustomTimeSpinner() {
 
         Spinner spinnerCustom = (Spinner) findViewById(R.id.spinner2);
 
@@ -113,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
     private void initCustomSpinner() {
 
         Spinner spinnerCustom= (Spinner) findViewById(R.id.spinner);
