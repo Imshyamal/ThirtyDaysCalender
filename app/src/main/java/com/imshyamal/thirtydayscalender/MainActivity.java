@@ -22,7 +22,10 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> dates = new ArrayList<String>();
+    ArrayList<String> dates1 = new ArrayList<String>();
     ArrayList<String> hours = new ArrayList<String>();
+    ArrayList<String> hours2 = new ArrayList<String>();
+
     ArrayList<String> minutes = new ArrayList<String>();
 
     @Override
@@ -30,49 +33,118 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initCustomSpinner();
-        initCustomTimeSpinner();
-
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("MMM-dd");
+        Date dateToday = calendar.getTime();
+        String newformat = df.format(dateToday);
+        initCustomTimeSpinner(newformat,0);
 
 
     }
 
-    private void initCustomTimeSpinner() {
+    private void initCustomTimeSpinner(String ddateString,int position) {
 
         Spinner timeSpinner = (Spinner) findViewById(R.id.spinner2);
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm:a");
 
-        cal.set(Calendar.HOUR_OF_DAY, 21);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("MMM-dd");
 
-        Date endHour = cal.getTime();
+        Date dateToday = calendar.getTime();
+        String newformat = df.format(dateToday);
 
-        cal.set(Calendar.HOUR_OF_DAY, 8);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
+        if (newformat.equals(ddateString) && position == 0) {
 
-        do {
-            String interval = sdf.format(cal.getTime()) + " - ";
-            cal.add(Calendar.MINUTE, 30);
-            interval += sdf2.format(cal.getTime());
-            hours.add(interval);
-        } while (cal.getTime().before(endHour));
+            SimpleDateFormat sdf = new SimpleDateFormat("kk");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
+            int currentHour = Integer.parseInt(sdf.format(calendar.getTime()));
+            int currentMin = Integer.parseInt(sdf2.format(calendar.getTime()));
+
+            Log.e("SSS",Integer.toString(currentHour));
+
+
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf01 = new SimpleDateFormat("hh:mm");
+            SimpleDateFormat sdf02 = new SimpleDateFormat("hh:mm:a");
+            SimpleDateFormat sdf03 = new SimpleDateFormat("hh:mm:a");
+
+
+            cal.set(Calendar.HOUR_OF_DAY, 21);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+
+            Date endHour = cal.getTime();
+
+            cal.set(Calendar.HOUR_OF_DAY, currentHour);
+            if(currentMin > 30) {
+                cal.set(Calendar.MINUTE, 0);
+
+            }else {
+
+            }
+            cal.set(Calendar.SECOND, 0);
+
+            do {
+                String interval = sdf01.format(cal.getTime()) + " - ";
+                String interval1 = sdf03.format(cal.getTime());
+                cal.add(Calendar.MINUTE, 30);
+                interval += sdf02.format(cal.getTime());
+                hours.add(interval);
+                hours2.add(interval1);
+            } while (cal.getTime().before(endHour));
+
+
+
+
+
+        }else{
+
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm:a");
+            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm:a");
+
+
+            cal.set(Calendar.HOUR_OF_DAY, 21);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+
+            Date endHour = cal.getTime();
+
+            cal.set(Calendar.HOUR_OF_DAY, 8);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+
+            do {
+                String interval = sdf.format(cal.getTime()) + " - ";
+                String interval1 = sdf3.format(cal.getTime());
+                cal.add(Calendar.MINUTE, 30);
+                interval += sdf2.format(cal.getTime());
+
+                hours.add(interval);
+                hours2.add(interval1);
+            } while (cal.getTime().before(endHour));
+
+
+
+
+        }
+
+
+
 
         System.out.println("ArrayList " + hours);
 
 
-
-        CustomSpinnerAdapter customSpinnerAdapter=new CustomSpinnerAdapter(MainActivity.this,hours);
+        CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, hours);
         timeSpinner.setAdapter(customSpinnerAdapter);
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String item = parent.getItemAtPosition(position).toString();
+                String item1 = hours2.get(position);
 
-                Toast.makeText(parent.getContext(), "Customized Spinner." + item, Toast.LENGTH_LONG).show();
+                Toast.makeText(parent.getContext(), "Customized Spinner." + item1, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -82,180 +154,68 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
     }
 
 
-
-
-   /* private void initCustomTimeSpinner() {
-
-        Spinner spinnerCustom = (Spinner) findViewById(R.id.spinner2);
-
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:a");
-
-        SimpleDateFormat startHourFormat = new SimpleDateFormat("HH");
-        cal.set(Calendar.HOUR_OF_DAY, 8);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-
-
-        int startHour = Integer.parseInt(startHourFormat.format(cal.getTime()));
-        Log.e("startHour",Integer.toString(startHour));
-
-        Log.e("withot format Starttime",cal.getTime().toString());
-
-        SimpleDateFormat endHourFormat = new SimpleDateFormat("HH");
-        cal.set(Calendar.HOUR_OF_DAY, 21);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-
-        int endHour = Integer.parseInt(endHourFormat.format(cal.getTime()));
-        Log.e("endHour",Integer.toString(endHour));
-
-        Log.e("withot format End time",cal.getTime().toString());
-
-        String test = sdf.format(cal.getTime());
-        Log.e("TEST", test);
-
-        for (int i = startHour;i <= endHour; i++) {
-            String ampm="";
-            int a = cal.get(Calendar.AM_PM);
-
-            if(a == Calendar.AM)
-            {
-                ampm="AM";
-            }
-            else
-            {
-                ampm="PM";
-            }
-
-                int k=0;
-            if(k==0)
-            {
-
-                hours.add(startHour+":00-"+startHour+":30"+ampm);
-            }
-            else if(k==1)
-            {
-                hours.add(startHour+":30 - " + (startHour+1)+":00");
-            }
-
-            cal.set(Calendar.HOUR_OF_DAY, i );
-           // hours.add(sdf.format(cal.getTime()));
-            System.out.println("ArrayList"+hours);
-            k=1;
-
-        }
-
-
-
-
-
-
-
-
-
-        String result = sdf.format(Calendar.getInstance().getTime());
-      //  System.out.println(result);
-
-
-
-
-
-    }
-*/
     private void initCustomSpinner() {
 
-        Spinner spinnerCustom= (Spinner) findViewById(R.id.spinner);
-        // Spinner Drop down elements
-     /*   ArrayList<String> languages = new ArrayList<String>();
-        languages.add("Andorid");
-        languages.add("IOS");
-        languages.add("PHP");
-        languages.add("Java");
-        languages.add(".Net");
-*/
-/*
-
-        String Tag="";
-        Calendar cal = Calendar.getInstance();
-        cal.getTime();
-        cal.set(Calendar.MONTH, 8);
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        SimpleDateFormat df = new SimpleDateFormat("MMM dd");
-        System.out.print(df.format(cal.getTime()));
-        for (int i = 1; i < maxDay; i++) {
-
-            dates.add(df.format(cal.getTime()));
-           cal.set(Calendar.DAY_OF_MONTH, i + 1);
-            Log.d("",df.format(cal.getTime()));
-
-        }
-*/
-    /*    Calendar calendar = Calendar.getInstance();
-
-        SimpleDateFormat mdformat = new SimpleDateFormat("MMM dd ");
-        SimpleDateFormat month1 = new SimpleDateFormat("MMM ");
-        SimpleDateFormat day1 = new SimpleDateFormat("dd");
-        String strDate =  mdformat.format(calendar.getTime());
-        String month2=month1.format(calendar.getTime());
-        String day2=day1.format(calendar.getTime());
-
-        dates.add(strDate);
-        dates.add(month2);
-        dates.add(day2);*/
+        Spinner spinnerCustom = (Spinner) findViewById(R.id.spinner);
 
         Calendar cal = Calendar.getInstance();
-        // int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        // cal.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-        //  cal.set(Calendar.DAY_OF_MONTH, 1);
 
         int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         SimpleDateFormat df = new SimpleDateFormat("MMM-dd");
-        int today=cal.get(Calendar.DAY_OF_MONTH);
-        for (int i = today;i <= maxDay; i++) {
+        int today = cal.get(Calendar.DAY_OF_MONTH);
+        int count = 1;
+        for (int i = today; i <= maxDay; i++) {
 
-            dates.add( df.format(cal.getTime()));
+            if (count == 1) {
+                dates.add("Today");
+                count++;
+            } else if (count == 2) {
+                dates.add("Tomorrow");
+                count++;
+            } else {
+                dates.add(df.format(cal.getTime()));
+
+            }
+            dates1.add(df.format(cal.getTime()));
             cal.set(Calendar.DAY_OF_MONTH, i + 1);
 
+
         }
 
-        int sPinnerDisplayedList= (maxDay-today)+1;
+        int sPinnerDisplayedList = (maxDay - today);
 
         Calendar cal1 = Calendar.getInstance();
-        cal1.set(Calendar.MONTH, cal1.get(Calendar.MONTH)+1);
+        cal1.set(Calendar.MONTH, cal1.get(Calendar.MONTH) + 1);
         cal1.set(Calendar.DAY_OF_MONTH, 1);
         int maxDaysInNextmonth = cal1.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int sPinnerRemainingDays=maxDaysInNextmonth-sPinnerDisplayedList;
-        for (int i =0;i <= sPinnerRemainingDays; i++) {
+        int sPinnerRemainingDays = maxDaysInNextmonth - sPinnerDisplayedList;
+        for (int i = 0; i < sPinnerRemainingDays; i++) {
 
-            System.out.print(", " + df.format(cal1.getTime()));
-            dates.add( df.format(cal1.getTime()));
+
             cal1.set(Calendar.DAY_OF_MONTH, i + 1);
+            System.out.print(", " + df.format(cal1.getTime()));
+            dates.add(df.format(cal1.getTime()));
+            dates1.add(df.format(cal1.getTime()));
 
 
         }
 
 
-        CustomSpinnerAdapter customSpinnerAdapter=new CustomSpinnerAdapter(MainActivity.this,dates);
+        CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, dates);
         spinnerCustom.setAdapter(customSpinnerAdapter);
         spinnerCustom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String item = parent.getItemAtPosition(position).toString();
+                String item1 = dates1.get(position);
 
-                Toast.makeText(parent.getContext(), "Customized Spinner." + item, Toast.LENGTH_LONG).show();
+                initCustomTimeSpinner(item1,position);
+                Toast.makeText(parent.getContext(), "Customized Spinner." + item1, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -270,28 +230,23 @@ public class MainActivity extends AppCompatActivity {
         private final Context activity;
         private ArrayList<String> asr;
 
-        public CustomSpinnerAdapter(Context context,ArrayList<String> asr) {
-            this.asr=asr;
+        public CustomSpinnerAdapter(Context context, ArrayList<String> asr) {
+            this.asr = asr;
             activity = context;
         }
 
 
-
-        public int getCount()
-        {
+        public int getCount() {
             return asr.size();
         }
 
-        public Object getItem(int i)
-        {
+        public Object getItem(int i) {
             return asr.get(i);
         }
 
-        public long getItemId(int i)
-        {
-            return (long)i;
+        public long getItemId(int i) {
+            return (long) i;
         }
-
 
 
         @Override
@@ -302,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
             txt.setGravity(Gravity.CENTER_VERTICAL);
             txt.setText(asr.get(position));
             txt.setTextColor(Color.parseColor("#000000"));
-            return  txt;
+            return txt;
         }
 
         public View getView(int i, View view, ViewGroup viewgroup) {
@@ -313,11 +268,10 @@ public class MainActivity extends AppCompatActivity {
             txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down, 0);
             txt.setText(asr.get(i));
             txt.setTextColor(Color.parseColor("#000000"));
-            return  txt;
+            return txt;
         }
 
     }
-
 
 
 }
