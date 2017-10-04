@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initCustomTimeSpinner(String ddateString,int position) {
 
+
         CustomSpinnerAdapter customSpinnerAdapter=new CustomSpinnerAdapter(MainActivity.this,hours);
 
         Spinner timeSpinner = (Spinner) findViewById(R.id.spinner2);
@@ -56,68 +57,77 @@ public class MainActivity extends AppCompatActivity {
 
         if (newformat.equals(ddateString) && position == 0) {
 
-            hours.clear();
-            hours2.clear();
-
             SimpleDateFormat sdf = new SimpleDateFormat("kk");
-            SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
+
             int currentHour = Integer.parseInt(sdf.format(calendar.getTime()));
-            int currentMin = Integer.parseInt(sdf2.format(calendar.getTime()));
 
-            Log.e("SSS",Integer.toString(currentHour));
+if(currentHour<21)
+{
+    hours.clear();
+    hours2.clear();
 
+    SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
+  //  int currentHour = Integer.parseInt(sdf.format(calendar.getTime()));
+    int currentMin = Integer.parseInt(sdf2.format(calendar.getTime()));
 
-            Calendar cal = Calendar.getInstance();
-            SimpleDateFormat sdf01 = new SimpleDateFormat("hh:mm");
-            SimpleDateFormat sdf02 = new SimpleDateFormat("hh:mm:a");
-            SimpleDateFormat sdf03 = new SimpleDateFormat("hh:mm:a");
-
-
-            cal.set(Calendar.HOUR_OF_DAY, 21);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-
-            Date endHour = cal.getTime();
-            String endHour2 =sdf.format(cal.getTime());
-
-            cal.set(Calendar.HOUR_OF_DAY, currentHour);
-            if(currentMin >= 00 && currentMin <=30  )  {//&& currentHour<Integer.parseInt(endHour2)
-                cal.set(Calendar.HOUR_OF_DAY,currentHour);
-                cal.set(Calendar.MINUTE, 0);
-                cal.add(Calendar.MINUTE,120);
-
-            }else if (currentMin >= 31 && currentMin <=59 ){//&& currentHour<Integer.parseInt(endHour2)
-
-                cal.set(Calendar.HOUR_OF_DAY,currentHour);
-                cal.set(Calendar.MINUTE, 0);
-                cal.add(Calendar.MINUTE,150);
+    Log.e("SSS", Integer.toString(currentHour));
 
 
-            }
-            cal.set(Calendar.SECOND, 0);
-
-            hours.add("Within 90 Mins");
-            hours2.add(within90_Actual_time());
-
-
-            do {
-                String interval = sdf01.format(cal.getTime()) + " - ";
-                String interval1 = sdf03.format(cal.getTime());
-                cal.add(Calendar.MINUTE, 30);
-                interval += sdf02.format(cal.getTime());
+    Calendar cal = Calendar.getInstance();
+    SimpleDateFormat sdf01 = new SimpleDateFormat("hh:mm");
+    SimpleDateFormat sdf02 = new SimpleDateFormat("hh:mm:a");
+    SimpleDateFormat sdf03 = new SimpleDateFormat("hh:mm:a");
 
 
-             //   cal.add(calendar.MINUTE,90);
-                //String within_90_minutes_times=sdf03.format();
+    cal.set(Calendar.HOUR_OF_DAY, 21);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+
+    Date endHour = cal.getTime();
+    String endHour2 = sdf.format(cal.getTime());
+
+    cal.set(Calendar.HOUR_OF_DAY, currentHour);
+    if (currentMin >= 00 && currentMin <= 30) {//&& currentHour<Integer.parseInt(endHour2)
+        cal.set(Calendar.HOUR_OF_DAY, currentHour);
+        cal.set(Calendar.MINUTE, 0);
+        cal.add(Calendar.MINUTE, 120);
+
+    } else if (currentMin >= 31 && currentMin <= 59) {//&& currentHour<Integer.parseInt(endHour2)
+        Log.e("cal.getTime()1",cal.getTime().toString());
+        cal.set(Calendar.HOUR_OF_DAY, currentHour);
+        cal.set(Calendar.MINUTE, 0);
+        cal.add(Calendar.MINUTE, 150);
+       // Log.e("Current Hours:"+cal.HOUR_OF_DAY);
+        Log.e("cal.getTime()2",cal.getTime().toString());
 
 
+    }
+    cal.set(Calendar.SECOND, 0);
 
-                hours.add(interval);
-                hours2.add(interval1);
-            } while (cal.getTime().before(endHour));
-            customSpinnerAdapter.notifyDataSetChanged();
+    hours.add("Within 90 Mins");
+    hours2.add(within90_Actual_time());
+
+Log.e("cal.getTime()3",cal.getTime().toString());
+    while (cal.getTime().before(endHour));{
+        String interval = sdf01.format(cal.getTime()) + " - ";
+        String interval1 = sdf03.format(cal.getTime());
+        cal.add(Calendar.MINUTE, 30);
+        interval += sdf02.format(cal.getTime());
 
 
+        hours.add(interval);
+        hours2.add(interval1);
+    }
+    customSpinnerAdapter.notifyDataSetChanged();
+
+
+}else{
+    hours.clear();
+    hours2.clear();
+    hours.add("No Time Slot on Today");
+    hours2.add("");
+
+}
 
 
 
@@ -147,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             do {
                 String interval = sdf.format(cal.getTime()) + " - ";
                 String interval1 = sdf3.format(cal.getTime());
+
                 cal.add(Calendar.MINUTE, 30);
                 interval += sdf2.format(cal.getTime());
 
