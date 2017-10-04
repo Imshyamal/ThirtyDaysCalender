@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initCustomTimeSpinner(String ddateString,int position) {
 
+        CustomSpinnerAdapter customSpinnerAdapter=new CustomSpinnerAdapter(MainActivity.this,hours);
+
         Spinner timeSpinner = (Spinner) findViewById(R.id.spinner2);
 
         Calendar calendar = Calendar.getInstance();
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         String newformat = df.format(dateToday);
 
         if (newformat.equals(ddateString) && position == 0) {
+
+            hours.clear();
+            hours2.clear();
 
             SimpleDateFormat sdf = new SimpleDateFormat("kk");
             SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
@@ -73,30 +78,55 @@ public class MainActivity extends AppCompatActivity {
             cal.set(Calendar.SECOND, 0);
 
             Date endHour = cal.getTime();
+            String endHour2 =sdf.format(cal.getTime());
 
             cal.set(Calendar.HOUR_OF_DAY, currentHour);
-            if(currentMin > 30) {
+            if(currentMin >= 00 && currentMin <=30  )  {//&& currentHour<Integer.parseInt(endHour2)
+                cal.set(Calendar.HOUR_OF_DAY,currentHour);
                 cal.set(Calendar.MINUTE, 0);
+                cal.add(Calendar.MINUTE,120);
 
-            }else {
+            }else if (currentMin >= 31 && currentMin <=59 ){//&& currentHour<Integer.parseInt(endHour2)
+
+                cal.set(Calendar.HOUR_OF_DAY,currentHour);
+                cal.set(Calendar.MINUTE, 0);
+                cal.add(Calendar.MINUTE,150);
+
 
             }
             cal.set(Calendar.SECOND, 0);
+
+            hours.add("Within 90 Mins");
+            hours2.add(within90_Actual_time());
+
 
             do {
                 String interval = sdf01.format(cal.getTime()) + " - ";
                 String interval1 = sdf03.format(cal.getTime());
                 cal.add(Calendar.MINUTE, 30);
                 interval += sdf02.format(cal.getTime());
+
+
+             //   cal.add(calendar.MINUTE,90);
+                //String within_90_minutes_times=sdf03.format();
+
+
+
                 hours.add(interval);
                 hours2.add(interval1);
             } while (cal.getTime().before(endHour));
+            customSpinnerAdapter.notifyDataSetChanged();
 
 
 
 
 
         }else{
+
+
+            hours.clear();
+            hours2.clear();
+
 
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
@@ -123,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 hours.add(interval);
                 hours2.add(interval1);
             } while (cal.getTime().before(endHour));
+            customSpinnerAdapter.notifyDataSetChanged();
 
 
 
@@ -135,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("ArrayList " + hours);
 
 
-        CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, hours);
+        customSpinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, hours);
         timeSpinner.setAdapter(customSpinnerAdapter);
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -155,6 +186,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    private String within90_Actual_time(){
+
+       Calendar c1=Calendar.getInstance();
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("kk");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
+        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm:a");
+        int currentHour = Integer.parseInt(sdf.format(c1.getTime()));
+        int currentMin = Integer.parseInt(sdf2.format(c1.getTime()));
+        c1.add(Calendar.MINUTE,90);
+        String after90times =sdf3.format(c1.getTime());
+
+        return after90times;
+    }
+
+
+
 
 
     private void initCustomSpinner() {
