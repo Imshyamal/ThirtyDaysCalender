@@ -37,15 +37,16 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("MMM-dd");
         Date dateToday = calendar.getTime();
         String newformat = df.format(dateToday);
-        initCustomTimeSpinner(newformat,0);
+        initCustomTimeSpinner(newformat, 0);
 
 
     }
 
-    private void initCustomTimeSpinner(String ddateString,int position) {
+
+    private void initCustomTimeSpinner(String ddateString, int position) {
 
 
-        CustomSpinnerAdapter customSpinnerAdapter=new CustomSpinnerAdapter(MainActivity.this,hours);
+        CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, hours);
 
         Spinner timeSpinner = (Spinner) findViewById(R.id.spinner2);
 
@@ -60,78 +61,80 @@ public class MainActivity extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("kk");
 
             int currentHour = Integer.parseInt(sdf.format(calendar.getTime()));
+            if (currentHour < 21) {
+                hours.clear();
+                hours2.clear();
 
-if(currentHour<21)
-{
-    hours.clear();
-    hours2.clear();
+                SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
+                //  int currentHour = Integer.parseInt(sdf.format(calendar.getTime()));
+                int currentMin = Integer.parseInt(sdf2.format(calendar.getTime()));
 
-    SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
-  //  int currentHour = Integer.parseInt(sdf.format(calendar.getTime()));
-    int currentMin = Integer.parseInt(sdf2.format(calendar.getTime()));
-
-    Log.e("SSS", Integer.toString(currentHour));
+                Log.e("SSS", Integer.toString(currentHour));
 
 
-    Calendar cal = Calendar.getInstance();
-    SimpleDateFormat sdf01 = new SimpleDateFormat("hh:mm");
-    SimpleDateFormat sdf02 = new SimpleDateFormat("hh:mm:a");
-    SimpleDateFormat sdf03 = new SimpleDateFormat("hh:mm:a");
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat sdf01 = new SimpleDateFormat("hh:mm");
+                SimpleDateFormat sdf02 = new SimpleDateFormat("hh:mm:a");
+                SimpleDateFormat sdf03 = new SimpleDateFormat("hh:mm:a");
 
 
-    cal.set(Calendar.HOUR_OF_DAY, 21);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.HOUR_OF_DAY, 21);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
 
-    Date endHour = cal.getTime();
-    String endHour2 = sdf.format(cal.getTime());
+                Date endHour = cal.getTime();
+                String endHour2 = sdf.format(cal.getTime());
 
-    cal.set(Calendar.HOUR_OF_DAY, currentHour);
-    if (currentMin >= 00 && currentMin <= 30) {//&& currentHour<Integer.parseInt(endHour2)
-        cal.set(Calendar.HOUR_OF_DAY, currentHour);
-        cal.set(Calendar.MINUTE, 0);
-        cal.add(Calendar.MINUTE, 120);
+                cal.set(Calendar.HOUR_OF_DAY, currentHour);
+                if (currentMin >= 00 && currentMin <= 30) {//&& currentHour<Integer.parseInt(endHour2)
+                    cal.set(Calendar.HOUR_OF_DAY, currentHour);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.add(Calendar.MINUTE, 120);
 
-    } else if (currentMin >= 31 && currentMin <= 59) {//&& currentHour<Integer.parseInt(endHour2)
-        Log.e("cal.getTime()1",cal.getTime().toString());
-        cal.set(Calendar.HOUR_OF_DAY, currentHour);
-        cal.set(Calendar.MINUTE, 0);
-        cal.add(Calendar.MINUTE, 150);
-       // Log.e("Current Hours:"+cal.HOUR_OF_DAY);
-        Log.e("cal.getTime()2",cal.getTime().toString());
-
-
-    }
-    cal.set(Calendar.SECOND, 0);
-
-    hours.add("Within 90 Mins");
-    hours2.add(within90_Actual_time());
-
-Log.e("cal.getTime()3",cal.getTime().toString());
-    while (cal.getTime().before(endHour));{
-        String interval = sdf01.format(cal.getTime()) + " - ";
-        String interval1 = sdf03.format(cal.getTime());
-        cal.add(Calendar.MINUTE, 30);
-        interval += sdf02.format(cal.getTime());
+                } else if (currentMin >= 31 && currentMin <= 59) {//&& currentHour<Integer.parseInt(endHour2)
+                    Log.e("cal.getTime()1", cal.getTime().toString());
+                    cal.set(Calendar.HOUR_OF_DAY, currentHour);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.add(Calendar.MINUTE, 150);
+                    // Log.e("Current Hours:"+cal.HOUR_OF_DAY);
+                    Log.e("cal.getTime()2", cal.getTime().toString());
 
 
-        hours.add(interval);
-        hours2.add(interval1);
-    }
-    customSpinnerAdapter.notifyDataSetChanged();
+                }
+                cal.set(Calendar.SECOND, 0);
+
+                hours.add("Within 90 Mins");
+                hours2.add(within90_Actual_time());
+
+                Log.e("cal.getTime()3", cal.getTime().toString());
+                while (cal.getTime().before(endHour))
+                {
+                    String interval = sdf01.format(cal.getTime()) + " - ";
+                    String interval1 = sdf03.format(cal.getTime());
+                    cal.add(Calendar.MINUTE, 30);
+                    interval += sdf02.format(cal.getTime());
 
 
-}else{
-    hours.clear();
-    hours2.clear();
-    hours.add("No Time Slot on Today");
-    hours2.add("");
-
-}
+                    hours.add(interval);
+                    hours2.add(interval1);
+                }
+                customSpinnerAdapter.notifyDataSetChanged();
 
 
+            } else {
+                hours.clear();
+                hours2.clear();
+                hours.add("No Time Slot on Today");
+                hours2.add("");
 
-        }else{
+            }
+
+        }
+
+
+        else
+
+        {
 
 
             hours.clear();
@@ -167,8 +170,6 @@ Log.e("cal.getTime()3",cal.getTime().toString());
             customSpinnerAdapter.notifyDataSetChanged();
 
 
-
-
         }
 
 
@@ -197,6 +198,7 @@ Log.e("cal.getTime()3",cal.getTime().toString());
 
 
     }
+
 
 
     private String within90_Actual_time(){
